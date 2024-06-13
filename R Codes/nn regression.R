@@ -15,7 +15,7 @@ ggplot(advertising_data,aes(x=TV,y=sales,col=sales))+
   theme(legend.position = "none",
         axis.title = element_text(size=16),
         axis.text = element_text(size=14))+
-  labs(x="TV",y="Sales")
+  labs(x="TV Budget ($)",y="Sales (units)")
 
 advertising_data_scaled<-as.data.frame(scale(advertising_data))
   
@@ -26,7 +26,7 @@ ggplot(advertising_data_scaled,aes(x=TV,y=sales,col=sales))+
   theme(legend.position = "none",
         axis.title = element_text(size=16),
         axis.text = element_text(size=14))+
-  labs(x="TV",y="Sales")
+  labs(x="TV Budget ($)",y="Sales (units)")
 
 
 set.seed(2) 
