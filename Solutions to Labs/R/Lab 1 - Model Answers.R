@@ -67,7 +67,9 @@ par(mfcol=c(1,2)) # creates one row with 2 columns
 boxplot(uniform,xlab="Uniform")
 boxplot(normal,xlab="Normal")
 
-## Solution to extension tasks##normal Solution to extension tasks
+## Solution to extension tasks
+
+##normal Solution to extension tasks
 
 par(mfcol=c(2,1)) # creates two rows with one column
 
