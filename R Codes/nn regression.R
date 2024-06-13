@@ -7,39 +7,39 @@ library(MASS)
 
 #### Regression example
 
-housing_data<-read.csv("housing.csv")
+advertising_data<-read.csv("./R Codes/Advertising.csv")
 
-ggplot(housing_data,aes(x=median_income,y=households,col=median_house_value))+
+ggplot(advertising_data,aes(x=TV,y=sales,col=sales))+
   geom_point()+scale_color_gradient(low="blue", high="red")+
   scale_y_continuous(labels = label_comma())+
   theme(legend.position = "none",
         axis.title = element_text(size=16),
         axis.text = element_text(size=14))+
-  labs(x="Median income",y="Number of households")
+  labs(x="TV",y="Sales")
 
-housing_data_scaled<-as.data.frame(scale(housing_data[,-10]))
+advertising_data_scaled<-as.data.frame(scale(advertising_data))
   
 
-ggplot(housing_data_scaled,aes(x=median_income,y=households,col=median_house_value))+
+ggplot(advertising_data_scaled,aes(x=TV,y=sales,col=sales))+
   geom_point()+scale_color_gradient(low="blue", high="red")+
   scale_y_continuous(labels = label_comma())+
   theme(legend.position = "none",
         axis.title = element_text(size=16),
         axis.text = element_text(size=14))+
-  labs(x="Median income",y="Number of households")
+  labs(x="TV",y="Sales")
 
 
 set.seed(2) 
 
-housing_data_scaled<-housing_data_scaled[complete.cases(housing_data_scaled),]
+advertising_data_scaled<-advertising_data_scaled[complete.cases(advertising_data_scaled),]
 
 # Split the data into training and testing set 
-index <- sample(1:nrow(housing_data_scaled), round(0.75 * nrow(housing_data_scaled))) 
-training_data <- housing_data_scaled[index,] 
-test_data <- housing_data_scaled[-index,]
+index <- sample(1:nrow(advertising_data_scaled), round(0.8 * nrow(advertising_data_scaled))) 
+training_data <- advertising_data_scaled[index,] 
+test_data <- advertising_data_scaled[-index,]
 
 
-nn <- neuralnet(median_house_value ~.,  
+nn <- neuralnet(sales ~.,  
                 data = training_data, hidden = c(5, 3),  
                 linear.output = TRUE) 
 
@@ -47,18 +47,18 @@ nn <- neuralnet(median_house_value ~.,
 pr.nn <- compute(nn, test_data) 
 
 # Compute mean squared error 
-pr.nn_ <- pr.nn$net.result * (max(housing_data$median_house_value) - 
-                                min(housing_data$median_house_value))  + 
-  min(housing_data$median_house_value) 
-test.r <- (test_data$median_house_value) * (max(housing_data$median_house_value) - 
-                                              min(housing_data$median_house_value)) +  
-  min(housing_data$median_house_value) 
+pr.nn_ <- pr.nn$net.result * (max(advertising_data$sales) - 
+                                min(advertising_data$sales))  + 
+  min(advertising_data$sales) 
+test.r <- (test_data$sales) * (max(advertising_data$sales) - 
+                                              min(advertising_data$sales)) +  
+  min(advertising_data$sales) 
 MSE.nn <- sum((test.r - pr.nn_)^2) / nrow(test_data) 
 
 # Plot the neural network 
 plot(nn)
 
-plot(test_data$median_house_value, pr.nn_, col = "red",  
+plot(test_data$sales, pr.nn_, col = "red",  
      main = 'Real vs Predicted') 
 
 summary(nn)
@@ -94,7 +94,6 @@ model = neuralnet(
   species~island+bill_length_mm+bill_depth_mm+flipper_length_mm+body_mass_g,
   data=train_data,
   hidden=c(8,4),
-  act.fct = "logistic",
   linear.output = FALSE
 )
 
