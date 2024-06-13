@@ -69,16 +69,18 @@ results<-as.data.frame(nn$result.matrix)
 
 #### Classification example
 
+penguins <- read.csv("./R Codes/penguins.csv") %>% mutate_if(is.character, as.factor)
 
-iris <- iris %>% mutate_if(is.character, as.factor)
-
-data_rows <- floor(0.80 * nrow(iris))
-train_indices <- sample(c(1:nrow(iris)), data_rows)
-train_data <- iris[train_indices,]
-test_data <- iris[-train_indices,]
+penguins<-dplyr::select(penguins,species,bill_length_mm,bill_depth_mm,flipper_length_mm,
+                              body_mass_g) %>% drop_na()
+set.seed(2)
+data_rows <- floor(0.80 * nrow(penguins))
+train_indices <- sample(c(1:nrow(penguins)), data_rows)
+train_data <- penguins[train_indices,]
+test_data <- penguins[-train_indices,]
 
 model = neuralnet(
-  Species~Sepal.Length+Sepal.Width+Petal.Length+Petal.Width,
+  species~bill_length_mm+bill_depth_mm+flipper_length_mm+body_mass_g,
   data=train_data,
   hidden=c(4,2),
   linear.output = FALSE
@@ -87,13 +89,13 @@ model = neuralnet(
 plot(model,rep = "best")
 
 pred <- predict(model, test_data)
-labels <- c("setosa", "versicolor", "virginca")
+labels <- c("Chinstrap", "Gentoo", "Adelie")
 prediction_label <- data.frame(max.col(pred)) %>%     
   mutate(pred=labels[max.col.pred.]) %>%
   dplyr:: select(2) %>%
   unlist()
 
-table(test_data$Species, prediction_label)
+table(test_data$species, prediction_label)
 
 
 
