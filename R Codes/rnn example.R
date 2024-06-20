@@ -61,5 +61,3 @@ ggplot()+geom_line(data=data,aes(x=date,y=log_volume),linewidth=0.5)+
 
 
 
-
-
