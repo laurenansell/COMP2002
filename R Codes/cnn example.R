@@ -1,17 +1,22 @@
 library(keras)
-library(EBImage)
+library(EBImage) ## If this pack does not install, please use the code below (commented out)
+
+## if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
+## BiocManager::install("EBImage")
+
 library(stringr)
 library(pbapply)
 
 ## This example is using the cats vs dogs dataset available from Kaggle here: 
 ## https://www.kaggle.com/datasets/shaunthesheep/microsoft-catsvsdogs-dataset
 
-secondCat <- readImage("train/cat.1.jpg")
+secondCat <- readImage("./R Codes/dogcat/train/cat.1.jpg")
 display(secondCat)
 
 # Set image size
 width <- 50
 height <- 50
+
 
 extract_feature <- function(dir_path, width, height, labelsExist = T) {
   img_size <- width * height
@@ -57,9 +62,9 @@ extract_feature <- function(dir_path, width, height, labelsExist = T) {
 
 
 # Takes approx. 15min
-trainData <- extract_feature("train/", width, height)
+trainData <- extract_feature("./R Codes/dogcat/train/", width, height)
 # Takes slightly less
-testData <- extract_feature("test1/", width, height, labelsExist = F)
+testData <- extract_feature("./R Codes/dogcat/test1", width, height, labelsExist = F)
 
 # Check processing on second cat
 par(mar = rep(0, 4))
