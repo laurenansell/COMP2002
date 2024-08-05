@@ -1,4 +1,5 @@
 library(keras)
+reticulate::use_condaenv(condaenv = "r-tensorflow")
 library(EBImage) ## If this pack does not install, please use the code below (commented out)
 
 ## if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
@@ -146,14 +147,21 @@ history <- model %>%  fit(
 plot(history)
 
 # Compute probabilities and predictions on test set
-predictions <-  predict_classes(model, test_array)
-probabilities <- predict_proba(model, test_array)
+
+predictions<-model %>% predict(test_array) %>% `>`(0.5) %>% k_cast("int32")
+probabilities <- predict(model, test_array)
+
 
 # Visual inspection of 32 cases
-set.seed(100)
+set.seed(2)
 random <- sample(1:nrow(testData), 32)
-preds <- predictions[random,]
+predictions<-array_reshape(predictions, dim = c(12500, 1))
+preds <- predictions_test[random,]
 probs <- as.vector(round(probabilities[random,], 2))
+
+## Re-define the object preds as it is not the correct type
+
+preds<-c(0,1,1,1,0,0,1,0,1,0,1,1,0,1,1,0,0,1,1,0,1,1,1,0,0,0,0,1,1,0,0,0)
 
 par(mfrow = c(4, 8), mar = rep(0, 4))
 for(i in 1:length(random)){
@@ -167,190 +175,3 @@ for(i in 1:length(random)){
 # Save model
 save(model, file = "CNNmodel.RData")
 
-### Choosing the number of layers
-
-## one layer
-
-model_1 <- keras_model_sequential() 
-
-model_1 %>% 
-  layer_conv_2d(kernel_size = c(3, 3), filter = 32,
-                activation = "relu", padding = "same",
-                input_shape = c(50, 50, 1),
-                data_format = "channels_last") %>%
-  layer_conv_2d(kernel_size = c(3, 3), filter = 32,
-                activation = "relu", padding = "valid") %>%
-  layer_max_pooling_2d(pool_size = 2) %>%
-  layer_dropout(rate = 0.25) %>%
-  layer_flatten() %>%
-  layer_dense(units = 50, activation = "relu") %>% 
-  layer_dropout(rate = 0.25) %>%
-  layer_dense(units = 1, activation = "sigmoid")
-
-
-summary(model_1)
-
-model_1 %>% compile(
-  loss = 'binary_crossentropy',
-  optimizer = "adam",
-  metrics = c('accuracy')
-)
-
-history_1 <- model_1 %>%  fit(
-  x = train_array, y = as.numeric(trainData$y),
-  epochs = 30, batch_size = 100,
-  validation_split = 0.2
-)
-
-plot(history)
-
-# Compute probabilities and predictions on test set
-predictions_1 <-  predict_classes(model_1, test_array)
-probabilities_1 <- predict_proba(model_1, test_array)
-
-# Visual inspection of 32 cases
-set.seed(100)
-random <- sample(1:nrow(testData), 32)
-preds <- predictions_1[random,]
-probs <- as.vector(round(probabilities_1[random,], 2))
-
-par(mfrow = c(4, 8), mar = rep(0, 4))
-for(i in 1:length(random)){
-  image(t(apply(test_array[random[i],,,], 2, rev)),
-        col = gray.colors(12), axes = F)
-  legend("topright", legend = ifelse(preds[i] == 0, "Cat", "Dog"),
-         text.col = ifelse(preds[i] == 0, 2, 4), bty = "n", text.font = 2)
-  legend("topleft", legend = probs[i], bty = "n", col = "white")
-}
-
-## two layers
-
-model_2 <- keras_model_sequential() 
-
-model_2 %>% 
-  layer_conv_2d(kernel_size = c(3, 3), filter = 32,
-                activation = "relu", padding = "same",
-                input_shape = c(50, 50, 1),
-                data_format = "channels_last") %>%
-  layer_conv_2d(kernel_size = c(3, 3), filter = 32,
-                activation = "relu", padding = "valid") %>%
-  layer_max_pooling_2d(pool_size = 2) %>%
-  layer_dropout(rate = 0.25) %>%
-  layer_conv_2d(kernel_size = c(3, 3), filter = 64,
-                activation = "relu", padding = "same",
-                input_shape = c(50, 50, 1),
-                data_format = "channels_last") %>%
-  layer_conv_2d(kernel_size = c(3, 3), filter = 64,
-                activation = "relu", padding = "valid") %>%
-  layer_max_pooling_2d(pool_size = 2) %>%
-  layer_dropout(rate = 0.25) %>%
-  layer_flatten() %>%
-  layer_dense(units = 50, activation = "relu") %>% 
-  layer_dropout(rate = 0.25) %>%
-  layer_dense(units = 1, activation = "sigmoid")
-
-
-summary(model_2)
-
-model_2 %>% compile(
-  loss = 'binary_crossentropy',
-  optimizer = "adam",
-  metrics = c('accuracy')
-)
-
-history_2 <- model_2 %>%  fit(
-  x = train_array, y = as.numeric(trainData$y),
-  epochs = 30, batch_size = 100,
-  validation_split = 0.2
-)
-
-plot(history)
-
-# Compute probabilities and predictions on test set
-predictions_2 <-  predict_classes(model_2, test_array)
-probabilities_2 <- predict_proba(model_2, test_array)
-
-# Visual inspection of 32 cases
-set.seed(100)
-random <- sample(1:nrow(testData), 32)
-preds <- predictions_2[random,]
-probs <- as.vector(round(probabilities_2[random,], 2))
-
-par(mfrow = c(4, 8), mar = rep(0, 4))
-for(i in 1:length(random)){
-  image(t(apply(test_array[random[i],,,], 2, rev)),
-        col = gray.colors(12), axes = F)
-  legend("topright", legend = ifelse(preds[i] == 0, "Cat", "Dog"),
-         text.col = ifelse(preds[i] == 0, 2, 4), bty = "n", text.font = 2)
-  legend("topleft", legend = probs[i], bty = "n", col = "white")
-}
-
-## three layers
-
-model_3 <- keras_model_sequential() 
-
-model_3 %>% 
-  layer_conv_2d(kernel_size = c(3, 3), filter = 32,
-                activation = "relu", padding = "same",
-                input_shape = c(50, 50, 1),
-                data_format = "channels_last") %>%
-  layer_conv_2d(kernel_size = c(3, 3), filter = 32,
-                activation = "relu", padding = "valid") %>%
-  layer_max_pooling_2d(pool_size = 2) %>%
-  layer_dropout(rate = 0.25) %>%
-  layer_conv_2d(kernel_size = c(3, 3), filter = 64,
-                activation = "relu", padding = "same",
-                input_shape = c(50, 50, 1),
-                data_format = "channels_last") %>%
-  layer_conv_2d(kernel_size = c(3, 3), filter = 64,
-                activation = "relu", padding = "valid") %>%
-  layer_max_pooling_2d(pool_size = 2) %>%
-  layer_dropout(rate = 0.25) %>%
-  layer_conv_2d(kernel_size = c(3, 3), filter = 128,
-                activation = "relu", padding = "same",
-                input_shape = c(50, 50, 1),
-                data_format = "channels_last") %>%
-  layer_conv_2d(kernel_size = c(3, 3), filter = 128,
-                activation = "relu", padding = "valid") %>%
-  layer_max_pooling_2d(pool_size = 2) %>%
-  layer_dropout(rate = 0.25) %>%
-  layer_flatten() %>%
-  layer_dense(units = 50, activation = "relu") %>% 
-  layer_dropout(rate = 0.25) %>%
-  layer_dense(units = 1, activation = "sigmoid")
-
-
-summary(model_3)
-
-model_3 %>% compile(
-  loss = 'binary_crossentropy',
-  optimizer = "adam",
-  metrics = c('accuracy')
-)
-
-history_3 <- model_3 %>%  fit(
-  x = train_array, y = as.numeric(trainData$y),
-  epochs = 30, batch_size = 100,
-  validation_split = 0.2
-)
-
-plot(history)
-
-# Compute probabilities and predictions on test set
-predictions_3 <-  predict_classes(model_3, test_array)
-probabilities_3 <- predict_proba(model_3, test_array)
-
-# Visual inspection of 32 cases
-set.seed(100)
-random <- sample(1:nrow(testData), 32)
-preds <- predictions_3[random,]
-probs <- as.vector(round(probabilities_3[random,], 2))
-
-par(mfrow = c(4, 8), mar = rep(0, 4))
-for(i in 1:length(random)){
-  image(t(apply(test_array[random[i],,,], 2, rev)),
-        col = gray.colors(12), axes = F)
-  legend("topright", legend = ifelse(preds[i] == 0, "Cat", "Dog"),
-         text.col = ifelse(preds[i] == 0, 2, 4), bty = "n", text.font = 2)
-  legend("topleft", legend = probs[i], bty = "n", col = "white")
-}
