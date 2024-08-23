@@ -15,6 +15,8 @@ plot(svm_model, data=iris,
 set.seed(2)
 def.subset <- sample(150, 120)      
 
+
+
 iris_training<-iris[def.subset,]
 
 iris_test<-iris[-def.subset,]
