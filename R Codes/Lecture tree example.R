@@ -16,6 +16,10 @@ penguins$species<-as.factor(penguins$species)
 penguins$island<-as.factor(penguins$island)
 penguins$sex<-as.factor(penguins$sex)
 
+## Remove the NA values
+
+penguins<-na.omit(penguins)
+
 ## Create the tree
 
 penguin_tree<-rpart(species~., data = penguins)
@@ -23,3 +27,4 @@ penguin_tree<-rpart(species~., data = penguins)
 ## Plot the tree
 
 rpart.plot(penguin_tree, box.palette="RdBu", shadow.col="gray", nn=TRUE)
+
