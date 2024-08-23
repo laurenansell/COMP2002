@@ -1,7 +1,7 @@
 # COMP2002
 This repository was created for the materials for COMP2002. 
 
-As with most coding exercises, there is more than one way to complete the exercises given on the lab sheets and for the assessment. 
+The repository contains the code required to recreate the models and images from the lecture slides and the solutions to the lab exercises in both Python and R. They are provided to act as a guide for you for the report element of the assessment. 
 
 Examples take from:
 
