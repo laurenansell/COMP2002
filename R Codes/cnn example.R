@@ -175,3 +175,63 @@ for(i in 1:length(random)){
 # Save model
 save(model, file = "CNNmodel.RData")
 
+
+## Less hidden layers
+
+model_2 <- keras_model_sequential() 
+
+model_2 %>% 
+  layer_conv_2d(kernel_size = c(3, 3), filter = 32,
+                activation = "relu", padding = "same",
+                input_shape = c(50, 50, 1),
+                data_format = "channels_last") %>%
+  layer_conv_2d(kernel_size = c(3, 3), filter = 32,
+                activation = "relu", padding = "valid") %>%
+  layer_max_pooling_2d(pool_size = 2) %>%
+  layer_dropout(rate = 0.25) %>%
+  layer_flatten() %>%
+  layer_dense(units = 50, activation = "relu") %>% 
+  layer_dropout(rate = 0.25) %>%
+  layer_dense(units = 1, activation = "sigmoid")
+
+
+summary(model_2)
+
+model_2 %>% compile(
+  loss = 'binary_crossentropy',
+  optimizer = "adam",
+  metrics = c('accuracy')
+)
+
+history_2 <- model_2 %>%  fit(
+  x = train_array, y = as.numeric(trainData$y),
+  epochs = 30, batch_size = 100,
+  validation_split = 0.2
+)
+
+plot(history_2)
+
+# Compute probabilities and predictions on test set
+
+predictions_2<-model_2 %>% predict(test_array) %>% `>`(0.5) %>% k_cast("int32")
+probabilities_2 <- predict(model_2, test_array)
+
+
+# Visual inspection of 32 cases
+predictions_2<-array_reshape(predictions_2, dim = c(12500, 1))
+preds_2 <- predictions_2[random,]
+probs_2 <- as.vector(round(probabilities_2[random,], 2))
+
+## Re-define the object preds as it is not the correct type
+
+preds_2<-c(1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1,
+           1, 0, 0, 0, 0, 1, 1, 1, 0, 0)
+
+par(mfrow = c(4, 8), mar = rep(0, 4))
+for(i in 1:length(random)){
+  image(t(apply(test_array[random[i],,,], 2, rev)),
+        col = gray.colors(12), axes = F)
+  legend("topright", legend = ifelse(preds_2[i] == 0, "Cat", "Dog"),
+         text.col = ifelse(preds_2[i] == 0, 2, 4), bty = "n", text.font = 2)
+  legend("topleft", legend = probs_2[i], bty = "n", col = "white")
+}
