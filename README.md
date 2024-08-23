@@ -3,6 +3,8 @@ This repository was created for the materials for COMP2002.
 
 The repository contains the code required to recreate the models and images from the lecture slides and the solutions to the lab exercises in both Python and R. They are provided to act as a guide for you for the report element of the assessment. 
 
+The methods provided are not the *only* way to solve the exercises presented in the lab sheets and I encourage you to investigate alternative packages/methods.
+
 Examples take from:
 
 - An Introduction to Statsitical Learning
