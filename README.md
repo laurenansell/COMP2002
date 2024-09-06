@@ -14,3 +14,4 @@ Examples take from:
 Datasets are available from:
 
 - Cat and dog images: https://www.kaggle.com/datasets/shaunthesheep/microsoft-catsvsdogs-dataset
+- Iris dataset: https://www.kaggle.com/datasets/uciml/iris
