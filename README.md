@@ -9,3 +9,8 @@ Examples take from:
 
 - An Introduction to Statsitical Learning
 - CNN example by de Abreu e Lima, F (2018). poissonisfish: Convolutional Neural Networks in R. From https://poissonisfish.com/2018/07/08/convolutional-neural-networks-in-r/
+
+
+Datasets are available from:
+
+- Cat and dog images: https://www.kaggle.com/datasets/shaunthesheep/microsoft-catsvsdogs-dataset
