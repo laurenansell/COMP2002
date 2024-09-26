@@ -6,7 +6,7 @@ library(factoextra)
 library(keras)
 
 
-## Solution to exercise 1
+## Solution to exercise 2
 
 ## The iris dataset is also automatically included as one of the standard datasets in R. To bring in into our
 ## environment, we use the attach() function.
@@ -70,7 +70,7 @@ ggplot(data = data.frame(error), aes(x = 1:25, y = error)) +
   theme(axis.text = element_text(size=14),
         axis.title = element_text(size=16))
 
-## Solution to exercise 2
+## Solution to exercise 3
 
 ## To read in external data we use the read.csv() function. 
 
@@ -78,9 +78,9 @@ iris_data<-read.csv("Iris.csv") ## To use this the file MUST BE in saved in the 
 
 iris_data<-read.csv("C://Users/your_file_path/Iris.csv") ## You can also use the whole file path
 
-## Once the data is read in, from here the cde is the same as exercise 1.
+## Once the data is read in, from here the code is the same as exercise 2.
 
-## Solution to exercise 3
+## Solution to exercise 4
 
 ## The MNIST dataset can be read in through the keras package
 
