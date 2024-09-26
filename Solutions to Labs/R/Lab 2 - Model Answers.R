@@ -152,8 +152,6 @@ iris_data<-read.csv("C://Users/your_file_path/Iris.csv") ## You can also use the
 
 ## The MNIST dataset can be read in through the keras package
 
-library(T4transport)
-
 mnist <- dataset_mnist()
 x_train <- mnist$train$x
 y_train <- mnist$train$y
