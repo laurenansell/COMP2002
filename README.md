@@ -5,7 +5,13 @@ The repository contains the code required to recreate the models and images from
 
 The methods provided are not the **only** way to solve the exercises presented in the lab sheets and I encourage you to investigate alternative packages/methods.
 
-Examples take from:
+Examples are take from:
 
 - An Introduction to Statsitical Learning
 - CNN example by de Abreu e Lima, F (2018). poissonisfish: Convolutional Neural Networks in R. From https://poissonisfish.com/2018/07/08/convolutional-neural-networks-in-r/
+- Deep Learning with R and Keras: https://www.appsilon.com/post/r-keras-mnist
+
+Datasets are available from:
+
+- Cat and dog images: https://www.kaggle.com/datasets/shaunthesheep/microsoft-catsvsdogs-dataset
+- Iris dataset: https://www.kaggle.com/datasets/uciml/iris
