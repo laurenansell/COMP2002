@@ -152,6 +152,8 @@ iris_data<-read.csv("C://Users/your_file_path/Iris.csv") ## You can also use the
 
 ## The MNIST dataset can be read in through the keras package
 
+library(T4transport)
+
 mnist <- dataset_mnist()
 x_train <- mnist$train$x
 y_train <- mnist$train$y
@@ -172,14 +174,14 @@ for (idx in 1:36) {
 
 mnist<-read.csv("mnist_train.csv")
 
-mnist_pca <- princomp(mnist[, -1]) 
+mnist_pca <- princomp(mnist[,-1])
 
 
 ## Now we store the results of the PCA in a new dataframe
 new_variables <- as.data.frame(mnist_pca$scores)
 
 ## And add the class label information
-new_variables$labels <- mnist$label
+new_variables$labels <- y_train
 
 ## We only want to keep the information about the first and second principal components:
 
