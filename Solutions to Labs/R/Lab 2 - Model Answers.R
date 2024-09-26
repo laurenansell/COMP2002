@@ -4,9 +4,31 @@ library(class)
 library(cluster) 
 library(factoextra)
 library(keras)
-
+library(mlbench)
+library(tree) 
 
 ## Solution to exercise 2
+
+## For this first exercise we will be using a decision tree to classify the 
+## breast cancer dataset.
+
+data("BreastCancer") ## Brings the dataset into the environment
+
+head(BreastCancer) ## Check it has imported correctly
+
+def.subset <- sample(699, 559) ## create a list of indices to create the training set    
+
+data_training<-BreastCancer[def.subset,]
+
+data_test<-BreastCancer[-def.subset,]
+
+test_labels<-BreastCancer$Class[-def.subset]
+
+## Now we are ready to create the tree on the training data.
+
+tree.breastcancer = tree(Class ~ . - Class, data = data_training) 
+
+## Solution to exercise 3
 
 ## The iris dataset is also automatically included as one of the standard datasets in R. To bring in into our
 ## environment, we use the attach() function.
@@ -70,7 +92,7 @@ ggplot(data = data.frame(error), aes(x = 1:25, y = error)) +
   theme(axis.text = element_text(size=14),
         axis.title = element_text(size=16))
 
-## Solution to exercise 3
+## Solution to exercise 4
 
 ## To read in external data we use the read.csv() function. 
 
@@ -80,7 +102,7 @@ iris_data<-read.csv("C://Users/your_file_path/Iris.csv") ## You can also use the
 
 ## Once the data is read in, from here the code is the same as exercise 2.
 
-## Solution to exercise 4
+## Solution to exercise 5
 
 ## The MNIST dataset can be read in through the keras package
 
