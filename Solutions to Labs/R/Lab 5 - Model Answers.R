@@ -60,11 +60,23 @@ ggplot(df, aes(x=Iteration, y=Fitness))+geom_line(col="blue",linewidth=2)+
 
 ## Solution to exercise 2
 
+y<-data.frame()
+
+for (i in 1:10) {
+  
+  result<-optimise(BitFlipMutation,one_max,greaterThanOrEqual,50,10)
+  Fitness<-result$A
+  y<-cbind(y,Fitness)
+  
+}
+
+
 
 ## Solution to exercise 3
 
 ## Create an operator that generates a new random solution:
-random<-function(N){
+random<-function(x){
+  N<-length(x)
   x<-sample(0:1,size=N,replace=TRUE)
   return(x)
   }
@@ -76,6 +88,29 @@ BlockFlip<-function(x){
   xp<-x 
   xp[idx_1:idx_2]<-abs(1-xp[idx_1:idx_2]) 
   return(xp)
+  
+}
+
+
+result_50_blockflip<-optimise(BlockFlip, one_max, greaterThanOrEqual, 200, 50)
+result_50_bitflip<-optimise(BitFlipMutation,one_max,greaterThanOrEqual,200,50)
+result_50_random<-optimise(random,one_max,greaterThanOrEqual,200,50)
+
+## Plotting the results:
+Iteration<-c(1:length(result_50_blockflip$A))
+Fitness<-result_50_blockflip$A
+FitnessBF<-result_50_bitflip$A
+FitnessR<-result_50_random$A
+df<-as.data.frame(cbind(Iteration,Fitness,FitnessBF,FitnessR))
+
+ggplot()+geom_line(data=df, aes(x=Iteration, y=Fitness),col="red",linewidth=2)+
+  geom_line(data=df, aes(x=Iteration, y=FitnessBF),col="blue",linewidth=2)+
+  geom_line(data=df, aes(x=Iteration,y=FitnessR),col="green",linewidth=2)+
+  ylab("Fitness (maximum)")
+
+## Solution to exercise 4
+
+leading_ones<-function(x){
   
 }
 
