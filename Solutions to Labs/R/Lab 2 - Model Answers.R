@@ -26,7 +26,53 @@ test_labels<-BreastCancer$Class[-def.subset]
 
 ## Now we are ready to create the tree on the training data.
 
-tree.breastcancer = tree(Class ~ . - Class, data = data_training) 
+tree.breastcancer = tree(Class ~ . - Class, data = data_training)
+
+## If we wish we can plot the tree using base R:
+plot(tree.breastcancer)
+text(tree.breastcancer,pretty = 0) ## adds the labels
+
+
+## As trees are prone to overfitting, we want to find the missclassification
+## rate for the training data.
+
+training_error<-summary(tree.breastcancer)
+
+training_error<-training_error$misclass
+
+training_error<-training_error[1]/training_error[2]
+
+tree.pred = predict(tree.breastcancer, data_test, type = "class") 
+
+# Make predictions for the test data using the tree.
+
+tab <- table(tree.pred, test_labels) 
+
+test_error<-(tab[1,2] + tab[2,1]) / sum(tab)  # test error
+
+## Extension task - pruning the tree
+
+## Our tree had 11 terminal nodes, the prune.tree() function will systemically
+## move through the tree and removing (pruning) the least important parts.
+prune.tree(tree.breastcancer,method = "misclass")
+
+
+prune_result<-prune.tree(tree.breastcancer,method = "misclass")
+
+## Lets look at the deviance, this is the number of misclassifications in each 
+## sub tree
+
+plot(prune_result$dev)
+
+## Looking at the plot the we see the number of misclassified data points increasing
+## as the number of terminal nodes is decreased.
+
+## Using ggplot
+
+best_tree<-as.data.frame(cbind(prune_result$size,prune_result$dev))
+
+ggplot(best_tree,aes(x=V1,y=V2))+geom_point()+labs(x="Number of terminal nodes",
+                                                   y="Number of misclassified points")
 
 ## Solution to exercise 3
 
