@@ -74,9 +74,17 @@ for (i in 1:10) {
 
 ## Need to change the names of the columns so that they are unique
 
-y<-
+names(y) <- c("run_1","run_2","run_3","run_4","run_5","run_6","run_7",
+              "run_8","run_9","run_10")
 
-y_ave=y %>% mutate(ave_fit=rowMeans())
+y_ave=y %>% mutate(ave_fit=rowMeans(pick(where(is.numeric))))
+
+Iteration<-c(1:nrow(y_ave))
+
+y_ave<-cbind(y_ave,Iteration)
+
+ggplot(y_ave, aes(x=Iteration, y=ave_fit))+geom_line(col="blue",linewidth=2)+
+  ylab("Fitness (maximum)")
 
 ## Solution to exercise 3
 
