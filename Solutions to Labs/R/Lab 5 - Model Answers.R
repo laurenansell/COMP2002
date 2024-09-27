@@ -60,7 +60,9 @@ ggplot(df, aes(x=Iteration, y=Fitness))+geom_line(col="blue",linewidth=2)+
 
 ## Solution to exercise 2
 
-y<-data.frame()
+## First create an empty dataframe with 51 rows nd no columns to store the data
+
+y<-data.frame(matrix(NA,ncol=0,nrow = 51)) 
 
 for (i in 1:10) {
   
@@ -70,7 +72,11 @@ for (i in 1:10) {
   
 }
 
+## Need to change the names of the columns so that they are unique
 
+y<-
+
+y_ave=y %>% mutate(ave_fit=rowMeans())
 
 ## Solution to exercise 3
 
