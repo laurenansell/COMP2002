@@ -73,7 +73,6 @@ for (i in 1:10) {
   
 }
 
-
 y_ave=y %>% mutate(ave_fit=rowMeans(pick(where(is.numeric))))
 
 Iteration<-c(1:nrow(y_ave))
@@ -123,14 +122,16 @@ ggplot()+geom_line(data=df, aes(x=Iteration, y=Fitness),col="red",linewidth=2)+
 
 leading_ones<-function(x){
   
+  count<-0
+  
+  for (i in 1:length(x)) {
+    if (x[i] ==1) count<-count+1 else {break}
+    
+  }
+  
+  return(count)
+  
 }
 
-count<-0
 
-for (i in 1:length(x)) {
-  
-  if(x[i]==0)return(count) else count+1
-  
-}
 
-x<-sample(0:1,10,replace = TRUE)
