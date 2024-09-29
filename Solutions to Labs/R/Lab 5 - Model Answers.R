@@ -69,13 +69,10 @@ for (i in 1:10) {
   result<-optimise(BitFlipMutation,one_max,greaterThanOrEqual,50,10)
   Fitness<-result$A
   y<-cbind(y,Fitness)
+  names(y)[i]<-paste0("run_",i)## Need to make sure we create names for the columns
   
 }
 
-## Need to change the names of the columns so that they are unique
-
-names(y) <- c("run_1","run_2","run_3","run_4","run_5","run_6","run_7",
-              "run_8","run_9","run_10")
 
 y_ave=y %>% mutate(ave_fit=rowMeans(pick(where(is.numeric))))
 
@@ -128,4 +125,12 @@ leading_ones<-function(x){
   
 }
 
+count<-0
 
+for (i in 1:length(x)) {
+  
+  if(x[i]==0)return(count) else count+1
+  
+}
+
+x<-sample(0:1,10,replace = TRUE)
