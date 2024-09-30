@@ -118,6 +118,8 @@ ggplot()+geom_line(data=df, aes(x=Iteration, y=Fitness),col="red",linewidth=2)+
   geom_line(data=df, aes(x=Iteration,y=FitnessR),col="green",linewidth=2)+
   ylab("Fitness (maximum)")
 
+## Need to add a legend
+
 ## Solution to exercise 4
 
 leading_ones<-function(x){
@@ -132,6 +134,5 @@ leading_ones<-function(x){
   return(count)
   
 }
-
 
 
