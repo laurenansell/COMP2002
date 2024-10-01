@@ -102,23 +102,56 @@ BlockFlip<-function(x){
 }
 
 
-result_50_blockflip<-optimise(BlockFlip, one_max, greaterThanOrEqual, 200, 50)
-result_50_bitflip<-optimise(BitFlipMutation,one_max,greaterThanOrEqual,200,50)
-result_50_random<-optimise(random,one_max,greaterThanOrEqual,200,50)
+Random_result<-data.frame(matrix(NA,ncol=0,nrow = 201)) 
 
-## Plotting the results:
-Iteration<-c(1:length(result_50_blockflip$A))
-Fitness<-result_50_blockflip$A
-FitnessBF<-result_50_bitflip$A
-FitnessR<-result_50_random$A
-df<-as.data.frame(cbind(Iteration,Fitness,FitnessBF,FitnessR))
+for (i in 1:10) {
+  
+  result<-optimise(random,one_max,greaterThanOrEqual,200,50)
+  Fitness<-result$A
+  Random_result<-cbind(Random_result,Fitness)
+  names(Random_result)[i]<-paste0("run_",i)## Need to make sure we create names for the columns
+  
+}
 
-ggplot()+geom_line(data=df, aes(x=Iteration, y=Fitness),col="red",linewidth=2)+
-  geom_line(data=df, aes(x=Iteration, y=FitnessBF),col="blue",linewidth=2)+
-  geom_line(data=df, aes(x=Iteration,y=FitnessR),col="green",linewidth=2)+
-  ylab("Fitness (maximum)")
+Random_ave=Random_result %>% mutate(ave_fit=rowMeans(pick(where(is.numeric))))
 
-## Need to add a legend
+Blockflip_result<-data.frame(matrix(NA,ncol=0,nrow = 201)) 
+
+for (i in 1:10) {
+  
+  result<-optimise(BlockFlip,one_max,greaterThanOrEqual,200,50)
+  Fitness<-result$A
+  Blockflip_result<-cbind(Blockflip_result,Fitness)
+  names(Blockflip_result)[i]<-paste0("run_",i)## Need to make sure we create names for the columns
+  
+}
+
+Blockflip_ave=Blockflip_result %>% mutate(ave_fit=rowMeans(pick(where(is.numeric))))
+
+Bitflip_result<-data.frame(matrix(NA,ncol=0,nrow = 201)) 
+
+for (i in 1:10) {
+  
+  result<-optimise(BitFlipMutation,one_max,greaterThanOrEqual,200,50)
+  Fitness<-result$A
+  Bitflip_result<-cbind(Bitflip_result,Fitness)
+  names(Bitflip_result)[i]<-paste0("run_",i)## Need to make sure we create names for the columns
+  
+}
+
+Bitflip_ave=Bitflip_result %>% mutate(ave_fit=rowMeans(pick(where(is.numeric))))
+
+Iteration<-c(1:nrow(Bitflip_ave))
+
+mutation_results<-as.data.frame(cbind(Iteration, Bitflip_ave$ave_fit,
+                                      Blockflip_ave$ave_fit,Random_ave$ave_fit))
+mutation_results<-mutation_results %>% rename("Bitflip"="V2","Blockflip"="V3","Random"="V4")
+
+mutation_results<-mutation_results %>% pivot_longer(!Iteration,names_to = "Mutation",
+                                        values_to = "Fitness")
+
+ggplot(mutation_results,aes(x=Iteration,y=Fitness,col=Mutation))+
+  geom_line(linewidth=2)+labs(y="Fitness (maximise)",title = "OneMax")
 
 ## Solution to exercise 4
 
@@ -135,4 +168,56 @@ leading_ones<-function(x){
   
 }
 
+
+
+Random_result<-data.frame(matrix(NA,ncol=0,nrow = 201)) 
+
+for (i in 1:10) {
+  
+  result<-optimise(random,leading_ones,greaterThanOrEqual,200,50)
+  Fitness<-result$A
+  Random_result<-cbind(Random_result,Fitness)
+  names(Random_result)[i]<-paste0("run_",i)## Need to make sure we create names for the columns
+  
+}
+
+Random_ave=Random_result %>% mutate(ave_fit=rowMeans(pick(where(is.numeric))))
+
+Blockflip_result<-data.frame(matrix(NA,ncol=0,nrow = 201)) 
+
+for (i in 1:10) {
+  
+  result<-optimise(BlockFlip,leading_ones,greaterThanOrEqual,200,50)
+  Fitness<-result$A
+  Blockflip_result<-cbind(Blockflip_result,Fitness)
+  names(Blockflip_result)[i]<-paste0("run_",i)## Need to make sure we create names for the columns
+  
+}
+
+Blockflip_ave=Blockflip_result %>% mutate(ave_fit=rowMeans(pick(where(is.numeric))))
+
+Bitflip_result<-data.frame(matrix(NA,ncol=0,nrow = 201)) 
+
+for (i in 1:10) {
+  
+  result<-optimise(BitFlipMutation,leading_ones,greaterThanOrEqual,200,50)
+  Fitness<-result$A
+  Bitflip_result<-cbind(Bitflip_result,Fitness)
+  names(Bitflip_result)[i]<-paste0("run_",i)## Need to make sure we create names for the columns
+  
+}
+
+Bitflip_ave=Bitflip_result %>% mutate(ave_fit=rowMeans(pick(where(is.numeric))))
+
+Iteration<-c(1:nrow(Bitflip_ave))
+
+mutation_results<-as.data.frame(cbind(Iteration, Bitflip_ave$ave_fit,
+                                      Blockflip_ave$ave_fit,Random_ave$ave_fit))
+mutation_results<-mutation_results %>% rename("Bitflip"="V2","Blockflip"="V3","Random"="V4")
+
+mutation_results<-mutation_results %>% pivot_longer(!Iteration,names_to = "Mutation",
+                                                    values_to = "Fitness")
+
+ggplot(mutation_results,aes(x=Iteration,y=Fitness,col=Mutation))+
+  geom_line(linewidth=2)+labs(y="Fitness (maximise)",title="Leading Ones")
 
