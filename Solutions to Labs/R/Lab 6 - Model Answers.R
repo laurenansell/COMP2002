@@ -9,6 +9,7 @@
 
 library(tidyverse)
 library(smoof)
+library(mco)
 
 ## Solution to exercise 1
 
@@ -53,6 +54,19 @@ dominates(sol4,sol3)
 dominates(sol3,sol2)
 dominates(sol2,sol3)
 
+
+updateArchive<-function(A,y){
+  
+  idx<-c()
+  
+  for (i in 1:nrow(A)) {
+    if (dominates(y,A[i,])==TRUE) idx<-rbind(i)
+  }
+  
+  A<-A[-idx,]
+  
+  
+}
 
 ## Solution to exercise 3
 
