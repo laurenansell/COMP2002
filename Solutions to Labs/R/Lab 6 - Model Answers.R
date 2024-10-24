@@ -65,15 +65,6 @@ updateArchive<-function(A,y){
   
   A<-A[-idx,]
   
-  
-  for(i in 1:nrow(A)){
-    
-    if (dominates(A[i,],y)==TRUE) {break} else A<-rbind(A,y) ## adds it multiple times not just once- need to fix
-    
-    
-  }
-  
-  
 }
 
 ## Solution to exercise 3
