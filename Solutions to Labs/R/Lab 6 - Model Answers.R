@@ -29,8 +29,11 @@ for (i in 1:N) {
 }
 
 
+names(y)[1]<-"X1"
+names(y)[2]<-"X2"
+
 visualizeParetoOptimalFront(makeZDT1Function(10))+
-  geom_point(data=y, aes(x=y[,1],y=y[,2]),col="red")
+  geom_point(data=y, aes(x=X1,y=X2),col="red")
 
 
 ## Solution to exercise 2
