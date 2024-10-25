@@ -58,14 +58,26 @@ dominates(sol2,sol3)
 updateArchive<-function(A,y){
   
   idx<-c()
-  
+
   for (i in 1:nrow(A)) {
     if (dominates(y,A[i,])==TRUE) idx<-rbind(i)
   }
   
   A<-A[-idx,]
   
+  Dominate<-c()
+  
+  for (i in 1:nrow(A)) {
+    result<-dominates(A[i,],y)
+    Dominate<-c(Dominate,result)}
+  
+  if(any(Dominate==TRUE)){A}else{A<-rbind(A,y)} 
+  
+  return(A)
+  
 }
+
+
 
 ## Solution to exercise 3
 
