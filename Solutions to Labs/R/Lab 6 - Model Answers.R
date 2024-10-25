@@ -65,16 +65,16 @@ updateArchive<-function(A,y){
   Dominate<-c()
   
   for (i in 1:nrow(A)) {
-    if (dominates(y[i+1,],A[i,])==TRUE) idx<-rbind(i)
+    if (dominates(y,A[i,])==TRUE) idx<-rbind(i)
   }
   
   A<- if (isTRUE(length(idx)==0)) {A} else {A[-idx,]}
   
   for (i in 1:nrow(A)) {
-    result<-dominates(A[i,],y[i+1,])
+    result<-dominates(A[i,],y)
     Dominate<-c(Dominate,result)}
   
-  if(any(Dominate==TRUE)){A}else{A<-rbind(A,y[i+1,])} 
+  if(any(Dominate==TRUE)){A}else{A<-rbind(A,y)} 
   
   return(A)
   
@@ -84,9 +84,15 @@ A<-data.frame()
 A<-rbind(A,y[1,])
 
 for (i in 2:N) {
-  A<-rbind(A,updateArchive(A[i-1,],y[i,]))
-  
+  A_new<-updateArchive(A,y[i,])
+  A<-A_new
 }
+
+names(A)[1]<-"X1"
+names(A)[2]<-"X2"
+
+ggplot()+geom_point(data=y,aes(x=X1,y=X2))+
+  geom_point(data=A,aes(x=X1,y=X2),col="red")
 
 
 ## Solution to exercise 3
