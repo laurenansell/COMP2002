@@ -154,7 +154,7 @@ iris_data<-read.csv("Iris.csv") ## To use this the file MUST BE in saved in the 
 
 iris_data<-read.csv("C://Users/your_file_path/Iris.csv") ## You can also use the whole file path
 
-## Once the data is read in, from here the code is the same as exercise 2.
+## Once the data is read in, from here the code is the same as exercise 3.
 
 ## Solution to exercise 5
 
