@@ -13,7 +13,8 @@ library(cluster)
 library(factoextra)
 library(keras)
 library(mlbench)
-library(tree) 
+library(tree)
+library(e1071)
 
 ## Solution to exercise 2
 
@@ -202,3 +203,35 @@ ggplot(new_variables, aes(x = Comp.1, y = Comp.2,col=labels)) + geom_point(size=
   coord_fixed(ratio = 1)+
   theme(axis.title = element_text(size=16),
         legend.position = "right")
+
+## Creating the training and test sets:
+
+def.subset <- sample(60000, 45000)   
+
+data_training<-new_variables[def.subset,]
+data_test<-new_variables[-def.subset,]
+
+training_labels<-new_variables$labels[def.subset]
+test_labels<-new_variables$labels[-def.subset]
+
+## Fitting the model:
+
+svmfit <- svm(labels ~ . , data = data_training, kernal="radial",gamma=0.1 )
+
+## Obtaining the training and test errors:
+
+training_pred <- predict(svmfit, data_training)
+
+training_pred<-round(training_pred,0)
+
+tab <- table(predict = training_pred, truth = data_training$labels )
+training.error <- (tab[1,2]+tab[2,1])/sum(tab)
+training.error
+
+test_pred <- predict(svmfit, data_test)
+
+test_pred<-round(test_pred,0)
+
+tab1 <- table(predict = test_pred, truth = data_test$labels )
+test.error <- (tab1[1,2]+tab1[2,1])/sum(tab1)
+test.error
