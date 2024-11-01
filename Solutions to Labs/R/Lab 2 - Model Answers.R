@@ -102,7 +102,7 @@ iris_pca <- princomp(iris[, -5], cor = TRUE)
 new_variables <- as.data.frame(iris_pca$scores)
 
 ## And add the class label information
-new_variables$species <- iris_data$Species
+new_variables$species <- iris$Species
 
 ## We only want to keep the information about the first and second principal components:
 
