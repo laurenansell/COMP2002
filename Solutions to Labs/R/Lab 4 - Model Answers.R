@@ -53,8 +53,19 @@ model %>%
 
 ## Solution to exercise 2
 
+probs <- model |> predict(X_test)
+preds<-max.col(probs) - 1L
+true<-mnist$test$y
 
+confusion_matrix <- as.data.frame(table(preds, true))
 
+ggplot(data = confusion_matrix,
+       mapping = aes(x = true,
+                     y = preds)) +
+  geom_tile(aes(fill = Freq)) +
+  geom_text(aes(label = sprintf("%1.0f", Freq)), vjust = 1) +
+  scale_fill_gradient(low = "blue",
+                      high = "red")
 
 ## Solution to exercise 3
 
