@@ -12,4 +12,15 @@ const3<-as.data.frame(cbind(x,y3))
 ggplot()+geom_line(data=const1,aes(x=x,y=y1),linewidth=1.5)+
   geom_line(data=const2,aes(x=x,y=y2),col="red",linewidth=1.5)+
   geom_line(data=const3,aes(x=x,y=y3),col="blue",linewidth=1.5)+
-  ylim(0,16)+xlim(0,11)
+  scale_x_continuous(expand = c(0, 0), limits = c(0,NA)) + 
+  scale_y_continuous(expand = c(0, 0), limits = c(0, NA))+
+  geom_text()+annotate("text",label="5x+2y=30",x=2,y=12)+
+  annotate("text",label="5x+7y=35",x=1,y=5)+
+  annotate("text",label="2x+5y=20",x=7.5,y=2)
+
+
+
+  
+
+
+
