@@ -1,9 +1,7 @@
 library(ReinforcementLearning)
 
-devtools::install_github("markdumke/reinforcelearn",force = TRUE)
-library(reinforcelearn)
 
-## Example 1 - simple gridworld
+## Example - simple gridworld
 
 # Define state and action sets
 states <- c("s1", "s2", "s3", "s4")
@@ -82,9 +80,5 @@ print(model_new)
 # Plot reinforcement learning curve
 plot(model_new)
 
-
-## Example 2 - More complex gridworld
-
-env=makeGridworld(shape=c(4,4),goal.states=c(0,15))
 
 
